@@ -11,11 +11,16 @@ include("src/getfname.jl")
 
 # =========================================================================== #
 
+
+"""
+    resoudreSPP(fname)
+"""
 function resoudreSPP(fname)
     println("\nAlgo glouton avec recherche local...")
     C, A = loadSPP(fname)
     m, n = size(A)
 
+    
     function calcule_utilité(C, A, I) # vecteur de valeur, matrices des contraintes, et notre x
         nb_contrainte = count(==(1), A[:, I])
         valeur = C[I]

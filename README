@@ -1,2 +1,38 @@
+# TD Métaheuristique
+### Amina Miskar & Elias Benlaroussi 
 
-OK
+## information livrable 1
+
+*l'algorithme utilise principalement des masques binaires*
+
+
+### Algo glouton
+
+L'algo cherche quel élement possède la plus forte utilité (la valeur de l'élement divisé par le nombre de contrainte). Une fois choisis l'élement est mis a False de notre liste des [trouver mot], on vas ensuite crée un masque qui représente les contraintes dans laquelles notre élement selectionnée apparait. Puis par un ET logique nous permet d'enlevé des élements qui ne sont plus sélectionnable.   
+On recommence l'opération jusqu'a avoir une solution de construite.
+
+Exemple : 
+
+Voici ma matrice de contrainte :
+
+1001
+0101
+0100
+
+Mon quatrième élement est selectionnée, je vais donc fusionner les deux premières lignes de ma matrice pour obtenir un masque (avec OU).
+
+1101
+
+Je vais ensuite retirer de ma liste d'élements les élements qui sont présent dans mon masque.
+
+1101
+1110
+=
+1100
+
+### Algo de recherche local avec la simple descente 
+
+J'applique une simple descente, si j'obtiens une amélioration je recommence sur le resultat obtenu sinon je m'arrête.
+
+Pour la simple descente je cherche dans le voisinage de ma solution si il existe une meilleur solution. 
+Je fait du 1-1 swap, et pour chaque voisin je vérifie la validité puis le score. 

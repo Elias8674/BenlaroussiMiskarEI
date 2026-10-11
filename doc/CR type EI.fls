@@ -1,0 +1,68 @@
+PWD /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc
+INPUT /usr/local/texlive/2026/texmf.cnf
+INPUT /usr/local/texlive/2026/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.tex
+OUTPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.log
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/a4wide/a4wide.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/a4wide/a4wide.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/ntgclass/a4.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/ntgclass/a4.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel/babel.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel/babel.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel/txtbabel.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel-french/francais.ldf
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel-french/francais.ldf
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel/locale/und/babel-und.ini
+INPUT /usr/local/texlive/2026/texmf-dist/tex/generic/babel-french/francais.ldf
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/inputenc.sty
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/ucs/utf8x.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/ucs/utf8x.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/ucs/utf8x.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/utf8.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/omsenc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/omsenc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/omsenc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ot1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ot1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ot1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/t1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/t1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/t1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ts1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ts1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/base/ts1enc.dfu
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+INPUT /usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.aux
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.aux
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.aux
+OUTPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.aux
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
+OUTPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.pdf
+INPUT /usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR_EI1.tex
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR_EI1.tex
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR_EI1.tex
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+INPUT /Users/eliasbenlaroussi/Desktop/M1/Métaheuristiques/Implémentation/BenlaroussiMiskarEI/doc/CR type EI.aux
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT /usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb
