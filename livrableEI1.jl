@@ -5,9 +5,9 @@
 using JuMP, GLPK
 using LinearAlgebra
 
-include("loadSPP.jl")
-include("setSPP.jl")
-include("getfname.jl")
+include("src/loadSPP.jl")
+include("src/setSPP.jl")
+include("src/getfname.jl")
 
 # =========================================================================== #
 
