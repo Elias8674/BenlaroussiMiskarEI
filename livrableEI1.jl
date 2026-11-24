@@ -28,7 +28,7 @@ function est_realisable(A, x)
     return all(A * Int.(x) .<= 1)
 end
 
-# Mesure le temps écoulé en secondes (temps réel, pas CPU strict).
+# Mesure le temps écoulé en secondes.
 function mesurer(f)
     t0 = time_ns()
     resultat = f()
