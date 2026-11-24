@@ -1,169 +1,196 @@
-# =========================================================================== #
-# Compliant julia 1.x
+# EI1 - Set Packing Problem (SPP)
+# Construction gloutonne, recherche locale et comparaison exacte.
 
-# Using the following packages
-using JuMP, GLPK
+using JuMP
+using GLPK
 using LinearAlgebra
+using Printf
+const MOI = JuMP.MOI
 
-include("src/loadSPP.jl")
-include("src/setSPP.jl")
-include("src/getfname.jl")
+# Chargement des instances fourni avec le projet.
+include(joinpath(@__DIR__, "src", "loadSPP.jl"))
 
-# =========================================================================== #
-
-
-"""
-    resoudreSPP(fname)
-"""
-function resoudreSPP(fname)
-    println("\nAlgo glouton avec recherche local...")
-    C, A = loadSPP(fname)
+# Vérifie les dimensions et les données de l'instance.
+function verifier_instance(C, A)
     m, n = size(A)
-
-    
-    function calcule_utilité(C, A, I) # vecteur de valeur, matrices des contraintes, et notre x
-        nb_contrainte = count(==(1), A[:, I])
-        valeur = C[I]
-        
-        if nb_contrainte == 0
-            return valeur
-        end
-
-        return (valeur/nb_contrainte)
-    end
-
-    function greedy_algorithm(C, A)
-        m, n = size(A)
-        stop = false
-        mask = trues(n)
-        #solution = Int[]
-        score_solution = 0
-
-        solution = falses(n)
-
-
-        while !stop
-
-            utilités = Vector{Float64}(undef, n)
-
-            for i=1:n 
-                if mask[i] == false
-                    utilités[i] = 0
-                else
-                    utilités[i] = calcule_utilité(C, A, i)
-                end
-            end
-
-            # récupérer le meilleurs résultats de notre tableau d'utilités (on mets le i dans notre tableau de solution)
-            # ajouter le score a noter score_solution
-            meilleur_i = argmax(utilités)
-        #push!(solution, meilleur_i)
-            solution[meilleur_i] = true
-            score_solution = score_solution + C[meilleur_i]
-
-
-            # update le mask de x encore disponible
-            B = A[A[:, meilleur_i] .== 1, :] # création d'une matrice ou on ne conserve que les lignes de contrainte concerné par notre meilleur_i
-            
-            if size(B, 1) > 0 # on vérifie que le nombre de lignes dans notre matrice est égal a 0
-                mask_contrainte = vec(any(B .== 1, dims=1)) # création d'un mask qui représente nos contraintes
-                mask = mask .& .!mask_contrainte # ne garde les élements de mask que ne sont pas dans mask_contrainte
-            end
-
-            mask[meilleur_i] = false
-
-
-            # on verifie que tout le mask n'est pas a 0, sinon on arrête
-            if sum(mask) == 0 
-                stop = true
-            end
-        
-        end
-
-        return solution, score_solution
-
-    end
-
-
-
-
-    function check_validité(A, solution)
-        comptes = A * Int.(solution)
-        return all(comptes .<= 1)
-    end
-
-
-    function calcule_score(solution, C)
-        return dot(C, solution)
-    end
-
-
-    function simple_descente(score_solution, solution, n, C, A)
-
-        new_solution = copy(solution)
-
-        for i=1:n
-            if solution[i] == true
-                new_solution[i] = false
-                    for b=1:n
-                        if solution[b] == false
-                            new_solution[b] = true
-                            # vérifié la validité 
-                            if check_validité(A, new_solution)
-                                new_score = calcule_score(new_solution, C)
-
-                                if new_score > score_solution
-                                    return [new_solution, new_score]
-                                end
-                            end
-                            new_solution[b] = false
-                        end
-                    end
-                    new_solution[i] = true
-            end
-        end
-        
-
-        return []
-    end
-
-
-    function recherche_local(C, A, score_solution, solution)
-
-        stop = false
-        m, n = size(A)
-
-        score_améliorer = copy(score_solution)
-        solution_améliorer = copy(solution)
-
-
-        while !stop
-            resultat_simple_descente = simple_descente(score_améliorer, solution_améliorer, n, C, A)
-            if resultat_simple_descente == []
-                stop = true
-            else
-                solution_améliorer = resultat_simple_descente[1]
-                score_améliorer = resultat_simple_descente[2]    
-            end
-        end
-
-        return solution_améliorer, score_améliorer
-    end    
-
-
-
-
-    solution, score = greedy_algorithm(C, A)
-    solution_améliorer, score_améliorer = recherche_local(C, A, score, solution)
-
-    println("résultats algorithme glouton")
-    println("z = ", score)
-    println("x = ", solution)
-
-    println("résultats recherche local")
-    println("z = ", score_améliorer)
-    println("x = ", solution_améliorer)
-
+    length(C) == n || error("Le nombre de coûts ne correspond pas aux colonnes de A.")
+    all(x -> x == 0 || x == 1, A) || error("La matrice A doit être binaire.")
+    all(isfinite, C) || error("Les coûts doivent être finis.")
+    return m, n
 end
 
-# =========================================================================== #
+# Calcule le gain total d'une solution.
+score_solution(C, x) = dot(C, Int.(x))
+
+# Vérifie que chaque contrainte contient au plus une colonne choisie.
+function est_realisable(A, x)
+    size(A, 2) == length(x) || return false
+    return all(A * Int.(x) .<= 1)
+end
+
+# Mesure le temps écoulé en secondes (temps réel, pas CPU strict).
+function mesurer(f)
+    t0 = time_ns()
+    resultat = f()
+    return resultat, (time_ns() - t0) / 1e9
+end
+
+# Construit une solution en choisissant la meilleure utilité admissible.
+function greedy_algorithm(C, A)
+    _, n = verifier_instance(C, A)
+    solution = falses(n)
+    disponibles = trues(n)
+
+    while any(disponibles)
+        utilites = fill(-Inf, n)
+
+        for j in 1:n
+            if disponibles[j] && C[j] > 0
+                nb_contraintes = count(==(1), A[:, j])
+                utilites[j] = nb_contraintes == 0 ? Float64(C[j]) : C[j] / nb_contraintes
+            end
+        end
+
+        j = argmax(utilites)
+        isfinite(utilites[j]) || break  # Aucun candidat rentable.
+
+        solution[j] = true
+
+        # Une colonne devient interdite si elle partage une contrainte avec j.
+        lignes = A[:, j] .== 1
+        if any(lignes)
+            conflits = vec(any(A[lignes, :] .== 1, dims=1))
+            disponibles .&= .!conflits
+        end
+        disponibles[j] = false  # Ne pas reprendre la colonne choisie.
+    end
+
+    @assert est_realisable(A, solution)
+    return solution, score_solution(C, solution)
+end
+
+# Recherche le premier échange 1-1 qui améliore le score.
+function simple_descente(C, A, solution)
+    n = length(solution)
+    score_actuel = score_solution(C, solution)
+
+    for i in 1:n
+        solution[i] || continue  # Retirer une colonne choisie.
+
+        for j in 1:n
+            solution[j] && continue  # Ajouter une colonne non choisie.
+
+            candidat = copy(solution)
+            candidat[i] = false
+            candidat[j] = true
+
+            if est_realisable(A, candidat)
+                nouveau_score = score_solution(C, candidat)
+                if nouveau_score > score_actuel
+                    return candidat, nouveau_score, true
+                end
+            end
+        end
+    end
+
+    return copy(solution), score_actuel, false
+end
+
+# Répète les échanges jusqu'à absence d'amélioration.
+function recherche_locale(C, A, solution_initiale)
+    solution = copy(solution_initiale)
+    est_realisable(A, solution) || error("La solution initiale est irréalisable.")
+
+    while true
+        candidat, _, ameliore = simple_descente(C, A, solution)
+        ameliore || break
+        solution = candidat
+    end
+
+    return solution, score_solution(C, solution)
+end
+
+# Calcule l'optimum avec JuMP et GLPK.
+function resolution_exacte(C, A; limite_secondes=60.0)
+    m, n = verifier_instance(C, A)
+    modele = Model(GLPK.Optimizer)
+    set_silent(modele)
+    set_time_limit_sec(modele, limite_secondes)
+
+    @variable(modele, x[1:n], Bin)
+    @objective(modele, Max, sum(C[j] * x[j] for j in 1:n))
+    @constraint(modele, [i in 1:m], sum(A[i, j] * x[j] for j in 1:n) <= 1)
+
+    (_, temps) = mesurer(() -> optimize!(modele))
+    statut = termination_status(modele)
+    optimum_prouve = statut == MOI.OPTIMAL
+    valeur = has_values(modele) ? objective_value(modele) : missing
+
+    return (score=valeur, temps=temps, statut=statut, optimal=optimum_prouve)
+end
+
+# Charge et résout une instance par les trois méthodes.
+function resoudreSPP(fname; exact=true, limite_secondes=60.0, afficher=true)
+    C, A = loadSPP(fname)
+    m, n = verifier_instance(C, A)
+
+    ((x_glouton, z_glouton), t_glouton) = mesurer(() -> greedy_algorithm(C, A))
+    ((x_local, z_local), t_local) = mesurer(() -> recherche_locale(C, A, x_glouton))
+
+    exact_resultat = exact ? resolution_exacte(C, A; limite_secondes=limite_secondes) : nothing
+
+    if afficher
+        println("\nInstance : ", fname, " (", m, " contraintes, ", n, " colonnes)")
+        @printf("Glouton          : z = %.3f | temps = %.6f s\n", z_glouton, t_glouton)
+        @printf("Recherche locale : z = %.3f | temps = %.6f s\n", z_local, t_local)
+        println("Solution gloutonne : ", Int.(x_glouton))
+        println("Solution locale    : ", Int.(x_local))
+        if exact_resultat !== nothing
+            println("Solveur exact : ", exact_resultat.statut)
+            println("Meilleure valeur du solveur : ", exact_resultat.score)
+            @printf("Temps solveur : %.6f s\n", exact_resultat.temps)
+        end
+    end
+
+    return (instance=string(fname), m=m, n=n,
+            glouton=(solution=x_glouton, score=z_glouton, temps=t_glouton),
+            recherche_locale=(solution=x_local, score=z_local, temps=t_local),
+            exact=exact_resultat)
+end
+
+# Trouve les fichiers d'instances du dossier dat (sauf fichiers cachés).
+function lister_instances(dossier=joinpath(@__DIR__, "dat"))
+    isdir(dossier) || error("Dossier dat introuvable : $dossier")
+    fichiers = sort(filter(f -> isfile(joinpath(dossier, f)) && !startswith(f, "."), readdir(dossier)))
+    return [joinpath(dossier, f) for f in fichiers]
+end
+
+# Exécute 10 instances et enregistre les résultats dans res/.
+function experimentationSPP(fichiers=lister_instances(); exact=true, limite_secondes=60.0)
+    length(fichiers) >= 5 || error("Il faut au moins 10 instances dans dat/ (ou fournir 10 chemins).")
+    mkpath(joinpath(@__DIR__, "res"))
+    sortie = joinpath(@__DIR__, "res", "resultats_EI1.csv")
+    resultats = []
+
+    open(sortie, "w") do io
+        println(io, "instance;m;n;z_glouton;t_glouton_s;z_local;t_local_s;z_solveur;t_solveur_s;statut;optimal_prouve;gap_pct")
+        for fichier in fichiers
+            r = resoudreSPP(fichier; exact=exact, limite_secondes=limite_secondes, afficher=false)
+            push!(resultats, r)
+            e = r.exact
+            z_exact = e === nothing ? missing : e.score
+            t_exact = e === nothing ? missing : e.temps
+            statut = e === nothing ? "non_calcule" : string(e.statut)
+            optimal = e !== nothing && e.optimal
+            # Écart uniquement si l'optimum positif est prouvé.
+            gap = optimal && z_exact > 0 ? 100 * (z_exact - r.recherche_locale.score) / z_exact : missing
+            valeurs = (basename(fichier), r.m, r.n, r.glouton.score, r.glouton.temps,
+                       r.recherche_locale.score, r.recherche_locale.temps, z_exact, t_exact, statut, optimal, gap)
+            println(io, join(string.(valeurs), ";"))
+            println("Terminé : ", basename(fichier), " | z local = ", r.recherche_locale.score)
+        end
+    end
+
+    println("\nRésultats enregistrés dans : ", sortie)
+    return resultats
+end

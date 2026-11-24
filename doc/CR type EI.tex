@@ -1,75 +1,96 @@
-% Document : compte rendu des DM
-% Auteur : Xavier Gandibleux
-% Année académique : 2020-2021
 
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,11pt]{article}
 
+% --------------------------------------------------
+% Packages et configuration
+% --------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{lmodern}
+\usepackage{microtype}
 
-% passe en mode large sur la page A4
-\usepackage{a4wide} 
-
-% document francisé
-\usepackage[francais]{babel} 
-
-% permet la frappe de caracteres accentues (sur macOS)
-\usepackage[utf8x]{inputenc} 
-
-
-% individualisation des parametres de la page
-\parskip8pt
-\setlength{\topmargin}{-25mm}
-\setlength{\textheight}{250mm}
-
-%
-% -----------------------------------------------------------------------------------------------------------------------------------------------------
-%
+% --------------------------------------------------
+% Couleurs
+% --------------------------------------------------
+\definecolor{univblue}{RGB}{28,65,110}
+\definecolor{lightgray}{RGB}{100,100,100}
 
 \begin{document}
 
-~
-\vspace{50mm}
-{\large
-\begin{center}
-  Nantes Université --- UFR Sciences et Techniques\\
-  Master informatique\\
-  Année académique 2026-2027
-  \vspace{30mm}
- 
-  { \LARGE
- 
-     Dossier Exercice d'implémentation\\
-     \vspace{5mm}
- 
-     {\huge \textbf{Métaheuristiques}}
-     \vspace{5mm}
- 
-     Elias \textsc{Benlaroussi}%$^1$ --  Prénom \textsc{Nom}$^2$
-     \vspace{5mm}
-     Amina \textsc{Miskar}%$^1$ --  Prénom \textsc{Nom}$^2$
+% ==================================================
+% PAGE DE GARDE
+% ==================================================
+\begin{titlepage}
+    \thispagestyle{empty}
 
-     \vspace{50mm}
+    \begin{center}
+
+        % Établissement
+        \vspace*{1cm}
+
+        {\Large\bfseries Nantes Université}\\[0.25cm]
+        {\large UFR Sciences et Techniques}\\[0.2cm]
+        {\normalsize Master informatique}\\[0.2cm]
   
-     \today
-  }  
-\end{center}
-}
 
-\vfill
-\break
+        \vspace{1.8cm}
 
-% -----------------------------------------------------------------------------------------------------------------------------------------------------
+        % Ligne décorative
+        {\color{univblue}\rule{0.75\textwidth}{1.2pt}}
 
-\input{CR_EI1.tex} 
+        \vspace{1.8cm}
 
-% -----------------------------------------------------------------------------------------------------------------------------------------------------
+        % Nature du travail
+        {\large\scshape Dossier d'exercice d'implémentation}\\[0.8cm]
 
-%\input{cr_ei2.tex}  % decommenter lors de la composition du EI2
+        % Titre principal
+        {\color{univblue}\Huge\bfseries Métaheuristiques}\\[0.6cm]
 
-% -----------------------------------------------------------------------------------------------------------------------------------------------------
+        {\Large Exercice d'implémentation n\textsuperscript{o} 1}\\[0.3cm]
 
-%\input{cr_ei3.tex} % decommenter lors de la composition du EI3
+        {\large\itshape
+        Heuristique de construction et recherche locale\\
+        pour le Set Packing Problem (SPP)
+        }
 
+        \vspace{2cm}
 
+        % Auteurs
+        {\color{univblue}\rule{0.45\textwidth}{0.8pt}}\\[0.7cm]
+
+        {\large\bfseries Réalisé par}\\[0.6cm]
+
+        {\large Elias \textsc{Benlaroussi}}\\[0.35cm]
+        {\large Amina \textsc{Miskar}}
+
+        \vspace{1.5cm}
+
+        % Encadrement
+        {\large\bfseries Enseignant}\\[0.3cm]
+        {\large Xavier Gandibleux}
+
+        \vfill
+
+        % Pied de page
+        {\color{univblue}\rule{0.75\textwidth}{1.2pt}}\\[0.5cm]
+
+        {\normalsize Nantes}\\[0.2cm]
+        {\normalsize Année universitaire 2026--2027}
+
+    \end{center}
+\end{titlepage}
+
+% ==================================================
+% CONTENU DU RAPPORT
+% ==================================================
+
+\input{CR_EI1.tex}
+
+% Décommenter pour les exercices suivants :
+% \input{cr_ei2.tex}
+% \input{cr_ei3.tex}
 
 \end{document}
-
